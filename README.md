@@ -6,6 +6,8 @@ Now with null-safety!
 
 🚨🚨 THIS IS A WORK IN PROGRESS - PLEASE DO NOT USE IT IN PRODUCTION YET 🚨🚨
 
+[![codecov](https://codecov.io/gh/alanqchen/tmi.dart/branch/master/graph/badge.svg?token=C4SC92AIRI)](https://codecov.io/gh/alanqchen/tmi.dart)
+
 ---
 >Original repository by Ricardo Markiewicz // [@gazeria](https://twitter.com/gazeria).
 

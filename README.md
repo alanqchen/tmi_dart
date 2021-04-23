@@ -18,7 +18,7 @@ This project is heavily inspired by the [TMI.js](https://tmijs.com/) project, a 
 Install the dependency, create a client and start listening for chat events:
 
 ```dart
-import 'package:tmidart/tmi.dart' as tmi;
+import 'package:tmi/tmi.dart' as tmi;
 
 var client = tmi.Client(
     channels: ['nodinawe', 'androidedelvalle'],
@@ -31,10 +31,10 @@ var client = tmi.Client(
 );
 client.connect();
 
-client.on("message", (channel, userstate, message, self) {
+client.on('message', (channel, userstate, message, self) {
     if (self) return;
 
-    print("${channel}| ${userstate['display-name']}: ${message}");
+    print('${channel}| ${userstate['display-name']}: ${message}');
 });
 ```
 

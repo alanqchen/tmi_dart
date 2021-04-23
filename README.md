@@ -1,13 +1,15 @@
 # tmi.dart
 
-Dart library for the Twitch Messaging Interface. (Twitch.tv) 
+Dart library for the Twitch Messaging Interface. (Twitch.tv)
+
+Now with null-safety!
 
 🚨🚨 THIS IS A WORK IN PROGRESS - PLEASE DO NOT USE IT IN PRODUCTION YET 🚨🚨
 
 ---
->Made with 💙 by Ricardo Markiewicz // [@gazeria](https://twitter.com/gazeria).
+>Original repository by Ricardo Markiewicz // [@gazeria](https://twitter.com/gazeria).
 
-This project was heavily inspired by the [TMI.js](https://tmijs.com/) project, a Node.js Package for Twitch Chat.
+This project is heavily inspired by the [TMI.js](https://tmijs.com/) project, a Node.js Package for Twitch Chat.
 
 ## Getting Started
 
@@ -17,8 +19,13 @@ Install the dependency, create a client and start listening for chat events:
 import 'package:tmidart/tmi.dart' as tmi;
 
 var client = tmi.Client(
-    channels: "androidedelvalle",
-    secure: true,
+    channels: ['nodinawe', 'androidedelvalle'],
+    options: tmi.Options(
+        clientID: 'optional-client-id',
+        debug: true,
+    ),
+    connection: tmi.Connection(secure: true, reconnect: true),
+    identity: tmi.Identity('username', 'oauth:access_token'),
 );
 client.connect();
 

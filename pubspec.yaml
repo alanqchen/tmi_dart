@@ -15,6 +15,7 @@ dependencies:
   web_socket_channel: ^2.0.0
 
 dev_dependencies:
+  test_cov: ^1.0.1
   build_runner: ^1.11.0
   test:
   mockito: ^5.0.5

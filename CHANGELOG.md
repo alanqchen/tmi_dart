@@ -13,6 +13,7 @@
 * Dev: Add websok to the repository and fix to support null-safety
 * Dev: Change test_coverage to test_cov dependency
 * Dev: Refactor class mocks
+* Dev: Add dart package analyzer action
 
 ## 0.0.4
 

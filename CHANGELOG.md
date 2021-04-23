@@ -8,6 +8,7 @@
 * Major: Add reconnection support
 * Major: Remove fetching emote sets from global user state
 * Minor: Refactor connection ping/pong logic
+* Minor: Update LICENSE
 * Dev: Fork from original repository
 * Dev: Add websok to the repository and fix to support null-safety
 * Dev: Change test_coverage to test_cov dependency

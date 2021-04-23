@@ -1,7 +1,7 @@
 import 'package:logger/src/logger.dart';
-import 'package:tmi/src/message.dart';
-import 'package:tmi/tmi.dart';
-import 'package:tmi/src/utils.dart' as _;
+import '../../message.dart';
+import '../../../tmi.dart';
+import '../../utils.dart' as _;
 
 import '../command.dart';
 
@@ -15,14 +15,14 @@ class ClearMsg extends Command {
     var msg = _.get(message.params, 1);
 
     if (message.params.length > 1) {
-      var username = message.tags["login"];
+      var username = message.tags['login'];
       var deletedMessage = msg;
       var userstate = message.tags;
-      userstate["message-type"] = "messagedeleted";
+      userstate['message-type'] = 'messagedeleted';
 
       log.i("[${channel}] ${username}'s message has been deleted.");
       client.emit(
-        "messagedeleted",
+        'messagedeleted',
         [channel, username, deletedMessage, userstate],
       );
     }

@@ -22,7 +22,8 @@ void main() {
     var command = Names(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(client.emit("names", [

@@ -2,8 +2,8 @@ import 'package:tmi/tmi.dart' as tmi;
 
 void main() {
   var client = tmi.Client(
-    channels: "duendepablo",
-    secure: true,
+    channels: ["nodinawe"],
+    connection: tmi.Connection(secure: true, reconnect: true),
   );
   client.connect();
 

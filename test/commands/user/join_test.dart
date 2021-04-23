@@ -2,8 +2,10 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:tmi/src/commands/user/join.dart';
 import 'package:tmi/src/message.dart';
+import 'package:tmi/tmi.dart';
 
 import '../../mocks.dart';
+import '../../../lib/src/utils.dart' as _;
 
 void main() {
   var client;
@@ -13,7 +15,8 @@ void main() {
   setUp(() {
     client = MockClient();
     logger = MockLogger();
-    when(client.username).thenReturn("justinfan33");
+    // create stub for identity with random justinfan username
+    when(client.identity).thenReturn(Identity(_.justinfan(), ''));
   });
 
   test("emits when a user join to the chat", () {
@@ -21,21 +24,24 @@ void main() {
     var command = Join(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != Null);
+    command.call(message!);
 
     // THEN
     verify(client.emit("join", ["#dallas", "ronni", false]));
   });
 
-  test("detects if the join message if from myself", () {
+  test("detects if the join message is from myself", () {
     // GIVEN
     var message = Message.parse(
         ":justinfan33!justinfan33@ronni.tmi.twitch.tv JOIN #dallas");
-    when(client.username).thenReturn("justinfan33");
+    // create stub for identity with justinfan33 as username
+    when(client.identity).thenReturn(Identity('justinfan33', ''));
     var command = Join(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(client.lastJoined = "#dallas");

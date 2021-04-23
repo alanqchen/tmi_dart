@@ -1,16 +1,16 @@
 import 'dart:math';
 
 String channel(String str) {
-  var channel = (str ?? "").toLowerCase();
-  return channel[0] == "#" ? channel : "#" + channel;
+  var channel = (str).toLowerCase();
+  return channel[0] == '#' ? channel : '#' + channel;
 }
 
 String username(String str) {
-  var channel = (str ?? "").toLowerCase();
-  return channel[0] == "#" ? channel.substring(1) : channel;
+  var channel = (str).toLowerCase();
+  return channel[0] == '#' ? channel.substring(1) : channel;
 }
 
-String get(List<String> list, int index) {
+String? get(List<String> list, int index) {
   if (index >= list.length) return null;
 
   return list[index];
@@ -18,7 +18,7 @@ String get(List<String> list, int index) {
 
 int extractNumber(String str) {
   return str
-          .split(" ")
+          .split(' ')
           .map((n) => int.tryParse(n))
           .where((element) => element != null)
           .first ??
@@ -27,38 +27,38 @@ int extractNumber(String str) {
 
 // Escaping values:
 // http://ircv3.net/specs/core/message-tags-3.2.html#escaping-values
-String unescapeIRC(String msg) {
-  var unescapeIRCRegex = RegExp(r"\\([sn:r\\])", caseSensitive: false);
+String? unescapeIRC(String? msg) {
+  var unescapeIRCRegex = RegExp(r'\\([sn:r\\])', caseSensitive: false);
   var ircEscapedChars = {'s': ' ', 'n': '', ':': ';', 'r': ''};
 
   if (msg == null || !msg.contains('\\')) return msg;
 
   return msg.replaceAllMapped(
     unescapeIRCRegex,
-    (match) => ircEscapedChars[match[1]] ?? match[1],
+    (match) => ircEscapedChars[match[1]] ?? match[1]!,
   );
 }
 
 Map<String, dynamic> emotes(Map<String, dynamic> tags) {
-  return _parseComplexTag(tags, "emotes", "/", ":", ",");
+  return _parseComplexTag(tags, 'emotes', '/', ':', ',');
 }
 
 // Parse Twitch badges..
 Map<String, dynamic> badges(Map<String, dynamic> tags) {
-  return _parseComplexTag(tags, "badges");
+  return _parseComplexTag(tags, 'badges');
 }
 
 // Parse Twitch badge-info..
 Map<String, dynamic> badgeInfo(Map<String, dynamic> tags) {
-  return _parseComplexTag(tags, "badge-info");
+  return _parseComplexTag(tags, 'badge-info');
 }
 
 Map<String, dynamic> _parseComplexTag(
   Map<String, dynamic> tags,
   String tagKey, [
-  String splA = ",",
-  String splB = "/",
-  String splC = null,
+  String splA = ',',
+  String splB = '/',
+  String? splC,
 ]) {
   var raw = tags[tagKey];
 
@@ -67,7 +67,7 @@ Map<String, dynamic> _parseComplexTag(
   }
 
   var tagIsString = raw.runtimeType == String;
-  tags[tagKey + "-raw"] = tagIsString ? raw : null;
+  tags[tagKey + '-raw'] = tagIsString ? raw : null;
 
   if (raw == true) {
     tags[tagKey] = null;
@@ -95,14 +95,15 @@ Map<String, dynamic> _parseComplexTag(
 
 Random random = Random();
 String justinfan() {
-  return "justinfan${random.nextInt(80000) + 1000}";
+  return 'justinfan${random.nextInt(80000) + 1000}';
 }
 
-RegExp justinFanRegex = new RegExp(r"^justinfan\d+$");
+RegExp justinFanRegex = RegExp(r'^justinfan\d+$');
 bool isJustinfan(String username) {
   return justinFanRegex.hasMatch(username);
 }
 
-RegExp tokenRegEx = new RegExp(r'oauth:');
-String token(String str) =>
-    str != null ? str.toLowerCase().replaceFirst(tokenRegEx, "") : "";
+RegExp tokenRegEx = RegExp(r'oauth:');
+
+String token(String? str) =>
+    str != null ? str.toLowerCase().replaceFirst(tokenRegEx, '') : '';

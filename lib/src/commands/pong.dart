@@ -1,6 +1,6 @@
 import 'package:logger/src/logger.dart';
-import 'package:tmi/src/message.dart';
-import 'package:tmi/tmi.dart';
+import '../../src/message.dart';
+import '../../tmi.dart';
 
 import 'command.dart';
 
@@ -11,8 +11,8 @@ class Pong extends Command {
   void call(Message message) {
     var currDate = DateTime.now();
     client.currentLatency = (currDate.millisecondsSinceEpoch -
-            client.latency.millisecondsSinceEpoch) ~/
-        1000;
-    client.emit("pong", [client.currentLatency]);
+        client.latency.millisecondsSinceEpoch);
+    client.emit('pong', [client.currentLatency]);
+    client.emit('_promisePing');
   }
 }

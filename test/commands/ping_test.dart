@@ -14,8 +14,10 @@ void main() {
     logger = MockLogger();
   });
 
-  test("ensure emit ping event", () {
+  test("ensure emit ping event with isConnected true", () {
     // GIVEN
+    // set stub for isConnected = true
+    when(client.isConnected).thenReturn(true);
     var message = Message();
     var command = Ping(client, logger);
 
@@ -26,7 +28,10 @@ void main() {
     verify(client.emit("ping"));
   });
 
-  test("should send PONG response", () {
+  test("should send PONG response with isConnected true", () {
+    // GIVEN
+    // set stub for isConnected = true
+    when(client.isConnected).thenReturn(true);
     var message = Message();
     var command = Ping(client, logger);
 
@@ -35,5 +40,33 @@ void main() {
 
     // THEN
     verify(client.send("PONG"));
+  });
+
+  test("ensure emit ping event with isConnected false", () {
+    // GIVEN
+    // set stub for isConnected = false
+    when(client.isConnected).thenReturn(false);
+    var message = Message();
+    var command = Ping(client, logger);
+
+    // WHEN
+    command.call(message);
+
+    // THEN
+    verify(client.emit("ping"));
+  });
+
+  test("should send PONG response with isConnected true", () {
+    // GIVEN
+    // set stub for isConnected = false
+    when(client.isConnected).thenReturn(false);
+    var message = Message();
+    var command = Ping(client, logger);
+
+    // WHEN
+    command.call(message);
+
+    // THEN
+    verifyNever(client.send("PONG"));
   });
 }

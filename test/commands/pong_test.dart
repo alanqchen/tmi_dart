@@ -13,7 +13,10 @@ void main() {
   setUp(() {
     client = MockClient();
     logger = MockLogger();
+    // add stub for (DateTime) latency and (int) currentLatency
     when(client.latency).thenReturn(DateTime.now());
+    when(client.currentLatency)
+        .thenReturn(DateTime.now().millisecondsSinceEpoch);
   });
 
   test("emits a pong event", () {
@@ -28,6 +31,7 @@ void main() {
   });
 
   test("should set curreny latency on the client", () {
+    // GIVEN
     var command = Pong(client, logger);
 
     // WHEN

@@ -27,7 +27,8 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(
@@ -53,7 +54,8 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(
@@ -75,7 +77,8 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(
@@ -93,7 +96,8 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(client.emit("hosted", ["#ronni", "otheruser", 4, false]));
@@ -106,7 +110,8 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(client.emit("hosted", ["#ronni", "otheruser", 0, false]));

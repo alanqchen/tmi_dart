@@ -1,7 +1,7 @@
 import 'package:logger/src/logger.dart';
-import 'package:tmi/src/message.dart';
-import 'package:tmi/tmi.dart';
-import 'package:tmi/src/utils.dart' as _;
+import '../../message.dart';
+import '../../../tmi.dart';
+import '../../utils.dart' as _;
 
 import '../command.dart';
 
@@ -12,30 +12,33 @@ class UserState extends Command {
   void call(Message message) {
     var channel = _.channel(message.params[0]);
 
-    message.tags['username'] = client.username;
+    message.tags['username'] = client.identity.username;
 
     // Add the client to the moderators of this room..
-    if (message.tags["user-type"] == "mod") {
+    if (message.tags['user-type'] == 'mod') {
       if (!client.moderators.containsKey(client.lastJoined)) {
         client.moderators[client.lastJoined] = [];
       }
-      if (!client.moderators[client.lastJoined].contains(client.username)) {
-        client.moderators[client.lastJoined].add(client.username);
+      if (!client.moderators[client.lastJoined]!
+          .contains(client.identity.username)) {
+        client.moderators[client.lastJoined]!.add(client.identity.username);
       }
     }
 
     // Logged in and username doesn't start with justinfan..
-    if (!_.isJustinfan(client.username) && client.userstate[channel] == null) {
+    if (!_.isJustinfan(client.identity.username) &&
+        !client.userstate.containsKey(channel)) {
       client.userstate[channel] = message.tags;
       client.lastJoined = channel;
       // this.channels.push(channel);
-      log.i("Joined ${channel}");
-      client.emit("join", [channel, _.username(client.username), true]);
+      log.i('Joined ${channel}');
+      client
+          .emit('join', [channel, _.username(client.identity.username), true]);
     }
 
     // Emote-sets has changed, update it..
-    if (message.tags["emote-sets"] != client.emotes) {
-      _updateEmoteset(message.tags["emote-sets"]);
+    if (message.tags['emote-sets'] != client.emotes) {
+      _updateEmoteset(message.tags['emote-sets']);
     }
 
     client.userstate[channel] = message.tags;

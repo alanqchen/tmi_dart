@@ -1,6 +1,6 @@
 import 'package:logger/src/logger.dart';
-import 'package:tmi/src/message.dart';
-import 'package:tmi/tmi.dart';
+import '../message.dart';
+import '../../tmi.dart';
 
 import 'command.dart';
 
@@ -9,7 +9,9 @@ class Ping extends Command {
 
   @override
   void call(Message message) {
-    client.emit("ping");
-    client.send("PONG");
+    client.emit('ping');
+    if (client.isConnected) {
+      client.send('PONG');
+    }
   }
 }

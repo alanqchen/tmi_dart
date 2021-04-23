@@ -3,6 +3,7 @@ import 'package:test/test.dart';
 import 'package:tmi/src/commands/user/join.dart';
 import 'package:tmi/src/commands/user/part.dart';
 import 'package:tmi/src/message.dart';
+import 'package:tmi/tmi.dart';
 
 import '../../mocks.dart';
 
@@ -14,7 +15,7 @@ void main() {
   setUp(() {
     client = MockClient();
     logger = MockLogger();
-    when(client.username).thenReturn("justinfan33");
+    when(client.identity).thenReturn(Identity('justinfan33', ''));
   });
 
   test("emits when a user leave the chat", () {
@@ -22,7 +23,8 @@ void main() {
     var command = Part(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(client.emit("part", ["#dallas", "ronni", false]));
@@ -32,13 +34,14 @@ void main() {
     // GIVEN
     var message = Message.parse(
         ":justinfan33!justinfan33@ronni.tmi.twitch.tv PART #dallas");
-    when(client.username).thenReturn("justinfan33");
+    when(client.identity).thenReturn(Identity('justinfan33', ''));
     when(client.userstate).thenReturn({"dallas": []});
-    when(client.channels).thenReturn("dallas");
+    when(client.channels).thenReturn(["dallas"]);
     var command = Part(client, logger);
 
     // WHEN
-    command.call(message);
+    assert(message != null);
+    command.call(message!);
 
     // THEN
     verify(client.emit("part", ["#dallas", "justinfan33", true]));

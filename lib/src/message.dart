@@ -1,3 +1,5 @@
+import 'package:quiver/strings.dart';
+
 class Message {
   final String raw;
   final Map<String, dynamic> tags;
@@ -6,14 +8,15 @@ class Message {
   final List<String> params;
 
   Message({
-    this.raw,
-    this.tags,
-    this.prefix,
-    this.command,
-    this.params,
+    this.raw = '',
+    this.tags = const {},
+    this.prefix = '',
+    this.command = '',
+    this.params = const [],
   });
 
-  factory Message.parse(String data) {
+  // We want this to return possibly null, so it's a static function now
+  static Message? parse(String data) {
     // Parse a message.
     //
     // Based on TMI.js version at
@@ -23,14 +26,14 @@ class Message {
     var nextspace = 0;
 
     Map<String, dynamic> tags = {};
-    String prefix = "";
-    String command = "";
+    String prefix = '';
+    String command = '';
     List<String> params = [];
 
     // The first thing we check for is IRCv3.2 message tags.
     // http://ircv3.atheme.org/specification/message-tags-3.2
     if (data.codeUnitAt(0) == 64) {
-      var nextspace = data.indexOf(" ");
+      var nextspace = data.indexOf(' ');
 
       // Malformed IRC message..
       if (nextspace == -1) {
@@ -38,14 +41,14 @@ class Message {
       }
 
       // Tags are split by a semi colon..
-      var rawTags = data.substring(1, nextspace).split(";");
+      var rawTags = data.substring(1, nextspace).split(';');
 
       for (var i = 0; i < rawTags.length; i++) {
         // Tags delimited by an equals sign are key=value tags.
         // If there's no equals, we assign the tag a value of true.
         var tag = rawTags[i];
-        var pair = tag.split("=");
-        tags[pair[0]] = tag.substring(tag.indexOf("=") + 1) ?? "true";
+        var pair = tag.split('=');
+        tags[pair[0]] = tag.substring(tag.indexOf('=') + 1);
       }
 
       position = nextspace + 1;
@@ -58,7 +61,7 @@ class Message {
 
     // Extract the message's prefix if present. Prefixes are prepended with a colon..
     if (data.codeUnitAt(position) == 58) {
-      nextspace = data.indexOf(" ", position);
+      nextspace = data.indexOf(' ', position);
 
       // If there's nothing after the prefix, deem this message to be malformed.
       if (nextspace == -1) {
@@ -74,7 +77,7 @@ class Message {
       }
     }
 
-    nextspace = data.indexOf(" ", position);
+    nextspace = data.indexOf(' ', position);
 
     // If there's no more whitespace left, extract everything from the
     // current position to the end of the string as the command..
@@ -104,7 +107,7 @@ class Message {
     }
 
     while (position < data.length) {
-      nextspace = data.indexOf(" ", position);
+      nextspace = data.indexOf(' ', position);
 
       // If the character is a colon, we've got a trailing parameter.
       // At this point, there are no extra params, so we push everything

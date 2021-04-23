@@ -1,7 +1,7 @@
 import 'package:logger/src/logger.dart';
-import 'package:tmi/src/message.dart';
-import 'package:tmi/tmi.dart';
-import 'package:tmi/src/utils.dart' as _;
+import '../../message.dart';
+import '../../../tmi.dart';
+import '../../utils.dart' as _;
 
 import '../command.dart';
 
@@ -12,10 +12,10 @@ class Part extends Command {
   void call(Message message) {
     var channel = _.channel(message.params[0]);
     var isSelf = false;
-    var nick = message.prefix.split("!")[0];
+    var nick = message.prefix.split('!')[0];
 
     // Client left a channel..
-    if (client.username == nick) {
+    if (client.identity.username == nick) {
       isSelf = true;
       if (client.userstate[channel] != null) {
         client.userstate.remove(channel);
@@ -27,10 +27,10 @@ class Part extends Command {
       //var index = this.opts.channels.indexOf(channel);
       //if(index !== -1) { this.opts.channels.splice(index, 1); }
 
-      client.emit("_promisePart");
+      client.emit('_promisePart');
     }
 
     // Client or someone else left the channel, emit the part event..
-    client.emit("part", [channel, nick, isSelf]);
+    client.emit('part', [channel, nick, isSelf]);
   }
 }

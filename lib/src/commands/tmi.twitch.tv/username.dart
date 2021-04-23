@@ -1,6 +1,6 @@
 import 'package:logger/src/logger.dart';
-import 'package:tmi/src/message.dart';
-import 'package:tmi/tmi.dart';
+import '../../message.dart';
+import '../../../tmi.dart';
 
 import '../command.dart';
 
@@ -9,6 +9,6 @@ class Username extends Command {
 
   @override
   void call(Message message) {
-    client.username = message.params[0];
+    client.identity.username = message.params[0];
   }
 }

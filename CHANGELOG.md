@@ -14,6 +14,7 @@
 * Dev: Change test_coverage to test_cov dependency
 * Dev: Refactor class mocks
 * Dev: Add dart package analyzer action
+* Dev: Add initial documentation
 
 ## 0.0.4
 

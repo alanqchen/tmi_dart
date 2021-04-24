@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import '../tmi.dart';
-import 'websok/io.dart';
+import 'websock/io.dart';
 
 class Monitor {
   final Client client;
@@ -18,7 +18,7 @@ class Monitor {
     });
   }
 
-  void loop(IOWebsok sok) async {
+  void loop(IOWebsock sok) async {
     monitoring = true;
 
     if (monitoring) {

@@ -1,13 +1,11 @@
 /// Copyright (c) 2019 - Èrik Campobadal Forés
-library websok.io;
+/// Modified by Alan Chen
+library websock.io;
 
-import './websok.dart';
+import 'websock.dart';
 import 'package:web_socket_channel/io.dart';
 
-/// For the use of @required.
-import 'package:meta/meta.dart';
-
-class IOWebsok extends Websok<IOWebSocketChannel> {
+class IOWebsock extends Websock<IOWebSocketChannel> {
   /// HTTP request headers when [connect()] is called.
   final Map<String, String> headers;
 
@@ -16,7 +14,7 @@ class IOWebsok extends Websok<IOWebSocketChannel> {
   final Duration? pingInterval;
 
   /// Creates a new IO Websocket.
-  IOWebsok({
+  IOWebsock({
     required String host,
     int port = -1,
     String path = '',

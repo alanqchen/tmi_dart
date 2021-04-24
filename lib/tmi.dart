@@ -1,15 +1,12 @@
-library tmidart;
+library tmi_dart;
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:math';
 
-import 'package:http/testing.dart';
 import 'package:logger/logger.dart';
 import './src/monitor.dart';
-import 'src/websok/io.dart';
+import 'src/websock/io.dart';
 import 'package:eventify/eventify.dart';
-import 'package:quiver/async.dart';
 
 import 'src/commands/command.dart';
 import 'src/commands/ping.dart';
@@ -44,7 +41,7 @@ class Connection {
       this.maxReconnectInterval = 30000,
       this.reconnectDecay = 1.5,
       this.reconnectInterval = 1.0,
-      this.secure = false})
+      this.secure = true})
       : timeout = Duration(seconds: 10),
         reconnectTimeInterval = reconnectInterval {
     if (secure = true) {
@@ -72,7 +69,7 @@ class Client {
   final List<String> channels;
   final EventEmitter emitter = EventEmitter();
 
-  final IOWebsok _sok;
+  final IOWebsock _sok;
   late Monitor _monitor;
 
   // Optional properties
@@ -100,14 +97,15 @@ class Client {
   late Map<String, Command> userCommands;
 
   Client({
-    this.channels = const [],
+    required this.channels,
     options,
     connection,
     identity,
   })  : options = options ?? Options(),
         connection = connection ?? Connection(),
         identity = identity ?? Identity(_.justinfan(), ''),
-        _sok = IOWebsok(host: 'irc-ws.chat.twitch.tv', tls: connection.secure) {
+        _sok =
+            IOWebsock(host: 'irc-ws.chat.twitch.tv', tls: connection.secure) {
     noScopeCommands = {
       'PING': Ping(this, log),
       'PONG': Pong(this, log),

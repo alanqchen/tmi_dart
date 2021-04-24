@@ -1,12 +1,13 @@
-# tmi.dart
+# tmi_dart
+
+[![Dart CI](https://github.com/alanqchen/tmi.dart/actions/workflows/dart.yml/badge.svg?branch=master)](https://github.com/alanqchen/tmi.dart/actions/workflows/dart.yml)
+[![codecov](https://codecov.io/gh/alanqchen/tmi.dart/branch/master/graph/badge.svg?token=C4SC92AIRI)](https://codecov.io/gh/alanqchen/tmi.dart)
 
 Dart library for the Twitch Messaging Interface. (Twitch.tv)
 
-Now with null-safety!
+🚨 Work In Progress - this package may have bugs unsuitable for production 🚨
 
-🚨🚨 THIS IS A WORK IN PROGRESS - PLEASE DO NOT USE IT IN PRODUCTION YET 🚨🚨
-
-[![codecov](https://codecov.io/gh/alanqchen/tmi.dart/branch/master/graph/badge.svg?token=C4SC92AIRI)](https://codecov.io/gh/alanqchen/tmi.dart)
+### [Documentation](docs/README.md)
 
 ---
 >Original repository by Ricardo Markiewicz // [@gazeria](https://twitter.com/gazeria).
@@ -18,7 +19,7 @@ This project is heavily inspired by the [TMI.js](https://tmijs.com/) project, a 
 Install the dependency, create a client and start listening for chat events:
 
 ```dart
-import 'package:tmi/tmi.dart' as tmi;
+import 'package:tmi_dart/tmi.dart' as tmi;
 
 var client = tmi.Client(
     channels: ['nodinawe', 'androidedelvalle'],
@@ -53,6 +54,7 @@ This is the events that this library currently support (more will be added in th
 * ping
 * pong
 * connected
+* disconnected
 * resub
 * subanniversary
 * subscription
@@ -68,6 +70,8 @@ This is the events that this library currently support (more will be added in th
 * hosting
 * messagedeleted
 * roomstate
+* slow/slowmode
+* followersonly/followersmode
 * names
 * join
 * part
@@ -78,3 +82,10 @@ This is the events that this library currently support (more will be added in th
 * action
 * chat
 * raw_message
+* timeout
+* ban
+* vip
+* vips
+* mod
+* mods
+* notice

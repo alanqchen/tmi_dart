@@ -1,8 +1,6 @@
 /// Copyright (c) 2019 - Èrik Campobadal Forés
-library websok;
-
-/// For the use of @required.
-import 'package:meta/meta.dart';
+/// Modified by Alan Chen
+library websock;
 
 /// Import the underlying package to use websockets.
 // import 'package:web_socket_channel/io.dart';
@@ -12,7 +10,7 @@ import 'package:web_socket_channel/status.dart' as status;
 /// The [Websock] class is used to create a new websocket connection.
 /// It maintains all the state, socket connection and streams and
 /// it abstracts it to a high level usage.
-abstract class Websok<C extends WebSocketChannel> {
+abstract class Websock<C extends WebSocketChannel> {
   /// Stores the host of the websocket server.
   final String host;
 
@@ -43,7 +41,7 @@ abstract class Websok<C extends WebSocketChannel> {
   /// Creates a new websok instance and connects to the websocket immidiatly.
   /// If no port is provided, 80 wil be used in case tls = false, otherwise,
   /// 443 will be used.
-  Websok({
+  Websock({
     required this.host,
     this.port = -1,
     this.path = '',

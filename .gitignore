@@ -11,7 +11,7 @@
 
 # Coverage
 coverage/
-test/.test_coverage.dart
+test/.test_cov.dart
 coverage_badge.svg
 
 # IntelliJ related

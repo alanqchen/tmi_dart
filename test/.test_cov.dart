@@ -3,19 +3,35 @@
 import 'commands/no_op_test.dart' as commands_no_op_test;
 import 'commands/ping_test.dart' as commands_ping_test;
 import 'commands/pong_test.dart' as commands_pong_test;
+import 'commands/tmi_twitch_tv/clear_chat_test.dart' as commands_tmi_twitch_tv_clear_chat_test;
+import 'commands/tmi_twitch_tv/clear_message_test.dart' as commands_tmi_twitch_tv_clear_message_test;
+import 'commands/tmi_twitch_tv/connected_test.dart' as commands_tmi_twitch_tv_connected_test;
+import 'commands/tmi_twitch_tv/global_user_state_test.dart' as commands_tmi_twitch_tv_global_user_state_test;
+import 'commands/tmi_twitch_tv/host_target_test.dart' as commands_tmi_twitch_tv_host_target_test;
+import 'commands/tmi_twitch_tv/notice_test.dart' as commands_tmi_twitch_tv_notice_test;
 import 'commands/user/join_test.dart' as commands_user_join_test;
 import 'commands/user/names_test.dart' as commands_user_names_test;
 import 'commands/user/part_test.dart' as commands_user_part_test;
 import 'commands/user/priv_msg_test.dart' as commands_user_priv_msg_test;
+import 'commands/user/whisper_test.dart' as commands_user_whisper_test;
 import 'tmi_test.dart' as tmi_test;
+import 'websock/websock_test.dart' as websock_websock_test;
 
 void main() {
+  websock_websock_test.main();
   tmi_test.main();
   commands_ping_test.main();
+  commands_tmi_twitch_tv_clear_chat_test.main();
+  commands_tmi_twitch_tv_notice_test.main();
+  commands_tmi_twitch_tv_clear_message_test.main();
+  commands_tmi_twitch_tv_global_user_state_test.main();
+  commands_tmi_twitch_tv_host_target_test.main();
+  commands_tmi_twitch_tv_connected_test.main();
   commands_pong_test.main();
   commands_no_op_test.main();
   commands_user_priv_msg_test.main();
   commands_user_names_test.main();
   commands_user_join_test.main();
+  commands_user_whisper_test.main();
   commands_user_part_test.main();
 }

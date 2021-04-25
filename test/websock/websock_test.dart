@@ -12,7 +12,10 @@ void onData(dynamic message) => received = message;
 void main() {
   test('Performs a test websocket connection', () async {
     final sok = IOWebsock(
-        host: 'echo.websocket.org', query: {'encoding': 'text'}, tls: true)
+        host: 'echo.websocket.org',
+        query: {'encoding': 'text'},
+        port: 443,
+        tls: true)
       ..connect()
       ..listen(onData: onData);
     // Assets the connection.

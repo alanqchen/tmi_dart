@@ -15,6 +15,7 @@
 * Dev: Refactor class mocks
 * Dev: Add dart package analyzer action
 * Dev: Add initial documentation
+* Dev: Add additional test cases
 
 ## 0.0.4
 

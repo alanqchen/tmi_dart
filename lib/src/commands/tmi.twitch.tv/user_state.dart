@@ -26,12 +26,16 @@ class UserState extends Command {
     }
 
     // Logged in and username doesn't start with justinfan..
+    // Then the client joined a channel
     if (!_.isJustinfan(client.identity.username) &&
         !client.userstate.containsKey(channel)) {
+      // Set channel's userstate in map
       client.userstate[channel] = message.tags;
+      // Set last joined channel
       client.lastJoined = channel;
-      // this.channels.push(channel);
-      log.i('Joined ${channel}');
+      // Add channel to connected channels list
+      client.channels.add(channel);
+      if (client.debug) client.log.i('Joined ${channel}');
       client
           .emit('join', [channel, _.username(client.identity.username), true]);
     }

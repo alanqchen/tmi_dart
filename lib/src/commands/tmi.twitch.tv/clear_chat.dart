@@ -13,6 +13,7 @@ class ClearChat extends Command {
   @override
   void call(Message message) {
     var channel = _.channel(message.params[0]);
+    // note that the msg in this case will be the target username
     var msg = _.get(message.params, 1);
 
     // User has been banned / timed out by a moderator..
@@ -21,12 +22,13 @@ class ClearChat extends Command {
       var duration = message.tags['ban-duration'];
 
       if (duration == null) {
-        log.i('[${channel}] ${msg} has been banned.');
+        if (client.debug) log.i('[${channel}] ${msg} has been banned.');
         client.emit('ban', [channel, msg, null, message.tags]);
       } else {
-        log.i(
-          '[${channel}] ${msg} has been timed out for ${duration} seconds.',
-        );
+        if (client.debug)
+          log.i(
+            '[${channel}] ${msg} has been timed out for ${duration} seconds.',
+          );
         client.emit(
           'timeout',
           [channel, msg, null, int.tryParse(duration) ?? 0, message.tags],
@@ -34,7 +36,7 @@ class ClearChat extends Command {
       }
     } else {
       // Chat was cleared by a moderator..
-      log.i('[${channel}] Chat was cleared by a moderator.');
+      if (client.debug) log.i('[${channel}] Chat was cleared by a moderator.');
       client.emit('clearchat', [channel]);
       client.emit('_promiseClear', [null]);
     }

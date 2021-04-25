@@ -33,7 +33,7 @@ class Monitor {
         pingTimeout = Timer(client.connection.timeout, () {
           // If pingSent is still true, no pong was received in time
           if (pingSent == true) {
-            if (client.options.debug) client.log.w('PONG TIMEOUT');
+            if (client.debug) client.log.w('PONG TIMEOUT');
             pingLoop?.cancel();
             pingTimeout?.cancel();
             client.closeTimeout();

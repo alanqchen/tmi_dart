@@ -16,8 +16,11 @@ class GlobalUserState extends Command {
     client.globaluserstate = message.tags;
     client.emotes = message.tags['emote-sets'];
 
+    client.emit('globaluserstate', [message.tags]);
+
     // Received emote-sets..
     if (message.tags['emote-sets'] != null) {
+      client.emotesets = (message.tags['emote-sets'] as String).split(',');
       client.emit('emotesets', [client.emotesets]);
     }
   }

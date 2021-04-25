@@ -6,8 +6,8 @@ import 'package:tmi_dart/src/message.dart';
 import '../mocks.dart';
 
 void main() {
-  var client;
-  var logger;
+  late MockClient client;
+  late MockLogger logger;
 
   setUp(() {
     client = MockClient();

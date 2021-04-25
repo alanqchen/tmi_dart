@@ -16,8 +16,10 @@ class Join extends Command {
     // Joined a channel as a justinfan (anonymous) user.
     if (_.isJustinfan(client.identity.username) &&
         client.identity.username == nick) {
+      // Set last joined channel
       client.lastJoined = channel;
-      //this.channels.push(channel);
+      // Add channel to connected channels list
+      client.channels.add(channel);
       client.emit('join', [channel, nick, true]);
     }
 

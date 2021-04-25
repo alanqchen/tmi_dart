@@ -89,3 +89,5 @@ This is the events that this library currently support (more will be added in th
 * mod
 * mods
 * notice
+* globaluserstate
+* emotesets

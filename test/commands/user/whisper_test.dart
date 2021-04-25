@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:tmi_dart/src/commands/user/whisper.dart';
@@ -8,8 +6,8 @@ import 'package:tmi_dart/src/message.dart';
 import '../../mocks.dart';
 
 void main() {
-  var client;
-  var logger;
+  late MockClient client;
+  late MockLogger logger;
 
   setUp(() {
     client = MockClient();
@@ -37,7 +35,7 @@ void main() {
     });
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN

@@ -32,7 +32,7 @@ class Connected extends Command {
 
     var hasFulfilled = false;
     if (!client.alreadyConnected) {
-      client.log.i('Joining...');
+      if (client.debug) log.i('Joining...');
       client.on('_promiseJoin', (error, joinedChannel) {
         if (channel == utils.channel(joinedChannel)) {
           hasFulfilled = true;

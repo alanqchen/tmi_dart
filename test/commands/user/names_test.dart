@@ -6,15 +6,14 @@ import 'package:tmi_dart/src/message.dart';
 import '../../mocks.dart';
 
 void main() {
-  var client;
-  var logger;
+  late MockClient client;
+  late MockLogger logger;
   var message = Message.parse(
       ":justinfan64481.tmi.twitch.tv 353 justinfan64481 = #dallas :justinfan64481");
 
   setUp(() {
     client = MockClient();
     logger = MockLogger();
-    when(client.username).thenReturn("justinfan33");
   });
 
   test("emits names of users in the chat", () {
@@ -22,7 +21,7 @@ void main() {
     var command = Names(client, logger);
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN

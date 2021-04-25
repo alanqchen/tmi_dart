@@ -17,15 +17,13 @@ class Part extends Command {
     // Client left a channel..
     if (client.identity.username == nick) {
       isSelf = true;
+      // Check if the channel is in the userstate map, remove it if it is
       if (client.userstate[channel] != null) {
         client.userstate.remove(channel);
       }
 
-      var index = client.channels.indexOf(channel);
-      //if(index != -1) { this.channels.splice(index, 1); }
-
-      //var index = this.opts.channels.indexOf(channel);
-      //if(index !== -1) { this.opts.channels.splice(index, 1); }
+      // Remove channel from channels list
+      client.channels.remove(channel);
 
       client.emit('_promisePart');
     }

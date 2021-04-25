@@ -6,8 +6,8 @@ import 'package:tmi_dart/src/message.dart';
 import '../mocks.dart';
 
 void main() {
-  var client;
-  var logger;
+  late MockClient client;
+  late MockLogger logger;
   var message = Message();
 
   setUp(() {
@@ -40,6 +40,6 @@ void main() {
     verifyNever(logger.w(any));
     verifyNever(logger.e(any));
     verifyNever(logger.wtf(any));
-    verifyNever(logger.log(any));
+    verifyNever(logger.log(any, any));
   });
 }

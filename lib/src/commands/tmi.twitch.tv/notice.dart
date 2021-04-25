@@ -27,29 +27,33 @@ class Notice extends Command {
     switch (msgid) {
       // This room is now in subscribers-only mode.
       case 'subs_on':
-        client.log.i('[${channel}] This room is now in subscribers-only mode.');
+        if (client.debug)
+          log.i('[${channel}] This room is now in subscribers-only mode.');
         client.emits(['subscriber', 'subscribers', '_promiseSubscribers'],
             [channelTrueArr, channelTrueArr, nullArr]);
         break;
 
       // This room is no longer in subscribers-only mode.
       case 'subs_off':
-        client.log
-            .i('[${channel}] This room is no longer in subscribers-only mode.');
+        if (client.debug)
+          log.i(
+              '[${channel}] This room is no longer in subscribers-only mode.');
         client.emits(['subscriber', 'subscribers', '_promiseSubscribersoff'],
             [channelFalseArr, channelFalseArr, nullArr]);
         break;
 
       // This room is now in emote-only mode.
       case 'emote_only_on':
-        client.log.i('[${channel}] This room is now in emote-only mode.');
+        if (client.debug)
+          log.i('[${channel}] This room is now in emote-only mode.');
         client.emits(
             ['emoteonly', '_promiseEmoteonly'], [channelTrueArr, nullArr]);
         break;
 
       // This room is no longer in emote-only mode.
       case 'emote_only_off':
-        client.log.i('[${channel}] This room is no longer in emote-only mode.');
+        if (client.debug)
+          log.i('[${channel}] This room is no longer in emote-only mode.');
         client.emits(
             ['emoteonly', '_promiseEmoteonlyoff'], [channelFalseArr, nullArr]);
         break;
@@ -68,44 +72,32 @@ class Notice extends Command {
 
       // This room is now in r9k mode.
       case 'r9k_on':
-        client.log.i('[${channel}] This room is now in r9k mode.');
+        if (client.debug) log.i('[${channel}] This room is now in r9k mode.');
         client.emits(['r9kmode', 'r9kbeta', '_promiseR9kbeta'],
             [channelTrueArr, channelTrueArr, nullArr]);
         break;
 
       // This room is no longer in r9k mode.
       case 'r9k_off':
-        client.log.i('[${channel}] This room is no longer in r9k mode.');
+        if (client.debug)
+          log.i('[${channel}] This room is no longer in r9k mode.');
         client.emits(['r9kmode', 'r9kbeta', '_promiseR9kbetaoff'],
             [channelFalseArr, channelFalseArr, nullArr]);
         break;
 
       // The moderators of this room are: [..., ...]
       case 'room_mods':
-        var mods = msg
-            .split(': ')[1]
-            .toLowerCase()
-            .split(', ')
-            .where((String n) => n != null && n.isNotEmpty);
+        var mods = msg.split(': ')[1].toLowerCase().split(', ')
+          ..retainWhere((String n) => n.isNotEmpty);
 
-        client.emits([
-          '_promiseMods',
-          'mods'
-        ], [
-          [null, mods],
-          [channel, mods]
-        ]);
+        client.emit('_promiseMods', [null, mods]);
+        client.emit('mods', [channel, mods]);
         break;
 
       // There are no moderators for this room.
       case 'no_mods':
-        client.emits([
-          '_promiseMods',
-          'mods'
-        ], [
-          [null, []],
-          [channel, []]
-        ]);
+        client.emit('_promiseMods', [null, []]);
+        client.emit('mods', [channel, []]);
         break;
 
       // The VIPs of this channel are: [..., ...]
@@ -148,25 +140,25 @@ class Notice extends Command {
       case 'bad_ban_self':
       case 'bad_ban_staff':
       case 'usage_ban':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseBan'], noticeAndMsgid);
         break;
 
       // Ban command success..
       case 'ban_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseBan'], noticeAndNull);
         break;
 
       // Clear command failed..
       case 'usage_clear':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseClear'], noticeAndMsgid);
         break;
 
       // Mods command failed..
       case 'usage_mods':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits([
           'notice',
           '_promiseMods'
@@ -178,13 +170,13 @@ class Notice extends Command {
 
       // Mod command success..
       case 'mod_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseMod'], noticeAndNull);
         break;
 
       // VIPs command failed..
       case 'usage_vips':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits([
           'notice',
           '_promiseVips'
@@ -199,7 +191,7 @@ class Notice extends Command {
       case 'bad_vip_grantee_banned':
       case 'bad_vip_grantee_already_vip':
       case 'bad_vip_achievement_incomplete':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits([
           'notice',
           '_promiseVip'
@@ -211,7 +203,7 @@ class Notice extends Command {
 
       // VIP command success..
       case 'vip_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseVip'], noticeAndNull);
         break;
 
@@ -219,65 +211,65 @@ class Notice extends Command {
       case 'usage_mod':
       case 'bad_mod_banned':
       case 'bad_mod_mod':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseMod'], noticeAndMsgid);
         break;
 
       // Unmod command success..
       case 'unmod_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseUnmod'], noticeAndNull);
         break;
 
       // Unvip command success...
       case 'unvip_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseUnvip'], noticeAndNull);
         break;
 
       // Unmod command failed..
       case 'usage_unmod':
       case 'bad_unmod_mod':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseUnmod'], noticeAndMsgid);
         break;
 
       // Unvip command failed..
       case 'usage_unvip':
       case 'bad_unvip_grantee_not_vip':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseUnvip'], noticeAndMsgid);
         break;
 
       // Color command success..
       case 'color_changed':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseColor'], noticeAndNull);
         break;
 
       // Color command failed..
       case 'usage_color':
       case 'turbo_only_color':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseColor'], noticeAndMsgid);
         break;
 
       // Commercial command success..
       case 'commercial_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseCommercial'], noticeAndNull);
         break;
 
       // Commercial command failed..
       case 'usage_commercial':
       case 'bad_commercial_error':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseCommercial'], noticeAndMsgid);
         break;
 
       // Host command success..
       case 'hosts_remaining':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         var remainingHost = int.tryParse(msg[0]) ?? 0;
         client.emits([
           'notice',
@@ -295,7 +287,7 @@ class Notice extends Command {
       case 'bad_host_rate_exceeded':
       case 'bad_host_error':
       case 'usage_host':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits([
           'notice',
           '_promiseHost'
@@ -308,78 +300,78 @@ class Notice extends Command {
       // r9kbeta command failed..
       case 'already_r9k_on':
       case 'usage_r9k_on':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseR9kbeta'], noticeAndMsgid);
         break;
 
       // r9kbetaoff command failed..
       case 'already_r9k_off':
       case 'usage_r9k_off':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseR9kbetaoff'], noticeAndMsgid);
         break;
 
       // Timeout command success..
       case 'timeout_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseTimeout'], noticeAndNull);
         break;
 
       case 'delete_message_success':
-        client.log.i('[${channel} ${msg}]');
+        if (client.debug) log.i('[${channel} ${msg}]');
         client.emits(['notice', '_promiseDeletemessage'], noticeAndNull);
         break;
 
       // Followerson command failed...
       case 'usage_followers_on':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseFollowers'], noticeAndNull);
         break;
 
       // Followersoff command failed...
       case 'usage_followers_off':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseFollowersoff'], noticeAndNull);
         break;
 
       // Subscribersoff command failed..
       case 'already_subs_off':
       case 'usage_subs_off':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseSubscribersoff'], noticeAndMsgid);
         break;
 
       // Subscribers command failed..
       case 'already_subs_on':
       case 'usage_subs_on':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseSubscribers'], noticeAndMsgid);
         break;
 
       // Emoteonlyoff command failed..
       case 'already_emote_only_off':
       case 'usage_emote_only_off':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseEmoteonlyoff'], noticeAndMsgid);
         break;
 
       // Emoteonly command failed..
       case 'already_emote_only_on':
       case 'usage_emote_only_on':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseEmoteonly'], noticeAndMsgid);
         break;
 
       // Slow command failed..
       case 'bad_slow_duration':
       case 'usage_slow_on':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseSlow'], noticeAndMsgid);
         break;
 
       // Slowoff command failed..
       case 'usage_slow_off':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseSlowoff'], noticeAndMsgid);
         break;
 
@@ -393,7 +385,7 @@ class Notice extends Command {
       case 'bad_timeout_global_mod':
       case 'bad_timeout_self':
       case 'bad_timeout_staff':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseTimeout'], noticeAndMsgid);
         break;
 
@@ -401,14 +393,14 @@ class Notice extends Command {
       // Unban can also be used to cancel an active timeout.
       case 'untimeout_success':
       case 'unban_success':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseUnban'], noticeAndNull);
         break;
 
       // Unban command failed..
       case 'usage_unban':
       case 'bad_unban_no_ban':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseUnban'], noticeAndMsgid);
         break;
 
@@ -417,7 +409,7 @@ class Notice extends Command {
       case 'bad_delete_message_error':
       case 'bad_delete_message_broadcaster':
       case 'bad_delete_message_mod':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseDeletemessage'], noticeAndMsgid);
         break;
 
@@ -425,7 +417,7 @@ class Notice extends Command {
       case 'usage_unhost':
       case 'bad_unhost_error':
       case 'not_hosting':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseUnhost'], noticeAndMsgid);
         break;
 
@@ -439,7 +431,7 @@ class Notice extends Command {
       case 'whisper_limit_per_sec':
       case 'whisper_restricted':
       case 'whisper_restricted_recipient':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits(['notice', '_promiseWhisper'], noticeAndMsgid);
         break;
 
@@ -450,7 +442,7 @@ class Notice extends Command {
       case 'msg_channel_suspended':
       case 'tos_ban':
       case 'invalid_user':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emits([
           'notice',
           '_promiseBan',
@@ -488,13 +480,13 @@ class Notice extends Command {
       // Automod-related..
       case 'msg_rejected':
       case 'msg_rejected_mandatory':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emit('automod', [channel, msgid, msg]);
         break;
 
       // Unrecognized command..
       case 'unrecognized_cmd':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emit('notice', [channel, msgid, msg]);
         break;
 
@@ -548,7 +540,7 @@ class Notice extends Command {
       // Marker notices
       case 'bad_marker_client':
       case 'usage_marker':
-        client.log.i(basicLog);
+        if (client.debug) log.i(basicLog);
         client.emit('notice', [channel, msgid, msg]);
         break;
 
@@ -563,24 +555,24 @@ class Notice extends Command {
           client.wasCloseCalled = false;
           client.connection.reconnect = false;
           client.reason = msg;
-          client.log.e(client.reason);
+          if (client.debug) log.e(client.reason);
           client.close();
         } else if (msg.contains('Error logging in') ||
             msg.contains('Improperly formatted auth')) {
           client.wasCloseCalled = false;
           client.connection.reconnect = false;
           client.reason = msg;
-          client.log.e(client.reason);
+          if (client.debug) log.e(client.reason);
           client.close();
         } else if (msg.contains('Invalid NICK')) {
           client.wasCloseCalled = false;
           client.connection.reconnect = false;
           client.reason = 'Invalid NICK.';
-          client.log.e(client.reason);
+          if (client.debug) log.e(client.reason);
           client.close();
         } else {
-          client.log
-              .w('Could not parse NOTICE from tmi.twitch.tv:\n${message}');
+          if (client.debug)
+            log.w('Could not parse NOTICE from tmi.twitch.tv:\n${message}');
           client.emit('notice', [channel, msgid, msg]);
         }
         break;

@@ -8,9 +8,9 @@ import '../../mocks.dart';
 import '../../../lib/src/utils.dart' as _;
 
 void main() {
-  var client;
-  var logger;
-  var message = Message.parse(":ronni!ronni@ronni.tmi.twitch.tv JOIN #dallas");
+  late MockClient client;
+  late MockLogger logger;
+  Message? message;
 
   setUp(() {
     client = MockClient();
@@ -19,32 +19,43 @@ void main() {
     when(client.identity).thenReturn(Identity(_.justinfan(), ''));
   });
 
-  test("emits when a user join to the chat", () {
+  test('join event: non-client user joins a channel', () {
     // GIVEN
+    message = Message.parse(
+        ':nodin_bot!nodin_bot@nodin_bot.tmi.twitch.tv JOIN #nodinawe');
     var command = Join(client, logger);
+    when(client.userstate).thenReturn(Map<String, dynamic>.from({}));
+    when(client.channels).thenReturn(List<String>.from([]));
 
     // WHEN
     assert(message != Null);
     command.call(message!);
 
     // THEN
-    verify(client.emit("join", ["#dallas", "ronni", false]));
+    verify(client.emit('join', ['#nodinawe', 'nodin_bot', false]));
+    expect(client.userstate, {});
+    expect(client.channels, []);
   });
 
-  test("detects if the join message is from myself", () {
+  test("join event: justinfan/anonymous client joins a channel", () {
     // GIVEN
     var message = Message.parse(
-        ":justinfan33!justinfan33@ronni.tmi.twitch.tv JOIN #dallas");
+        ':justinfan33!justinfan33@justinfan33.tmi.twitch.tv JOIN #nodinawe');
     // create stub for identity with justinfan33 as username
     when(client.identity).thenReturn(Identity('justinfan33', ''));
+    when(client.userstate).thenReturn(Map<String, dynamic>.from({}));
+    when(client.channels).thenReturn(List<String>.from([]));
     var command = Join(client, logger);
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN
-    verify(client.lastJoined = "#dallas");
-    verify(client.emit("join", ["#dallas", "justinfan33", true]));
+    verify(client.emit('join', ['#nodinawe', 'justinfan33', true]));
+    verify(client.lastJoined = '#nodinawe');
+    // userstate should not be changed since it's a justinfan client
+    expect(client.userstate, {});
+    expect(client.channels, ['#nodinawe']);
   });
 }

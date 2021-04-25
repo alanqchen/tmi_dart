@@ -5,6 +5,7 @@ import 'package:tmi_dart/tmi.dart';
 
 import 'mocks.dart';
 
+/// Used to generate mocks.dart
 @GenerateMocks([Client, Logger])
 void main() {
   // Create mock object.

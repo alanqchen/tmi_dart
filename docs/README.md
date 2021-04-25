@@ -20,7 +20,7 @@ The Options constructor has two named parameters:
 | debug     | `bool`   | `false`       | If debug logging should be printed |
 
 ### Connection Class
-The Connection constructor has ten named parameters:
+The Connection constructor has ten named parameters, although only the most important two are list below. Details of the other parameters are documented in the source code.
 
 | Parameter | Type   | Default Value | Description                                                                                                                                                                                    |
 |-----------|--------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -105,6 +105,8 @@ This is the events that this library currently support (more will be added in th
 * mod
 * mods
 * notice
+* globaluserstate
+* emotesets
 
 ### Examples
 

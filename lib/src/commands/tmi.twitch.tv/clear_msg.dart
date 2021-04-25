@@ -20,7 +20,8 @@ class ClearMsg extends Command {
       var userstate = message.tags;
       userstate['message-type'] = 'messagedeleted';
 
-      log.i("[${channel}] ${username}'s message has been deleted.");
+      if (client.debug)
+        log.i("[${channel}] ${username}'s message has been deleted.");
       client.emit(
         'messagedeleted',
         [channel, username, deletedMessage, userstate],

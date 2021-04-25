@@ -4,6 +4,8 @@ import '../../message.dart';
 import '../../../tmi.dart';
 import '../../utils.dart' as _;
 
+/// Emits to 'whisper' and 'message'.
+/// Both have [#from, message tags, message, is self]
 class Whisper extends Command {
   Whisper(Client client, Logger log) : super(client, log);
 

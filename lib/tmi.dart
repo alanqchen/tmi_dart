@@ -111,8 +111,8 @@ class Identity {
 
 /// The tmi client.
 ///
-/// The [channels] property is the channels that the client initially connected
-/// to.
+/// The [channels] property is the channels that the client is connected
+/// or connecting to.
 ///
 /// The [options] property is the options values for the tmi client.
 ///
@@ -142,7 +142,7 @@ class Client {
     printer: PrettyPrinter(),
   );
 
-  final List<String> channels;
+  List<String> channels;
   final EventEmitter emitter = EventEmitter();
 
   final IOWebsock _sok;
@@ -159,7 +159,7 @@ class Client {
   String lastJoined = '';
   Map<String, List<String>> moderators = {};
   String emotes = '';
-  Map<String, String> emotesets = {};
+  List<String> emotesets = [];
   bool wasCloseCalled = false;
   String reason = '';
 
@@ -176,15 +176,17 @@ class Client {
   /// parameter should be a [Connection] object. The [identity] parameter should
   /// be a [Identity] object.
   Client({
-    required this.channels,
-    options,
-    connection,
-    identity,
+    required List<String> channels,
+    Options? options,
+    Connection? connection,
+    Identity? identity,
   })  : options = options ?? Options(),
         connection = connection ?? Connection(),
         identity = identity ?? Identity(_.justinfan(), ''),
         _sok =
-            IOWebsock(host: 'irc-ws.chat.twitch.tv', tls: connection.secure) {
+            IOWebsock(host: 'irc-ws.chat.twitch.tv', tls: connection!.secure),
+        channels = List.generate(
+            channels.length, (i) => _.channel(channels.elementAt(i))) {
     noScopeCommands = {
       'PING': Ping(this, log),
       'PONG': Pong(this, log),
@@ -221,6 +223,9 @@ class Client {
 
     _monitor = Monitor(this);
   }
+
+  // getter for debug mode
+  bool get debug => options.debug;
 
   void connect() {
     // Add reconnect decay and clamp if exceeds max

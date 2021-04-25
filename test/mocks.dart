@@ -47,6 +47,10 @@ class MockClient extends _i1.Mock implements _i4.Client {
       (super.noSuchMethod(Invocation.getter(#channels), returnValue: <String>[])
           as List<String>);
   @override
+  set channels(List<String>? _channels) =>
+      super.noSuchMethod(Invocation.setter(#channels, _channels),
+          returnValueForMissingStub: null);
+  @override
   _i3.EventEmitter get emitter =>
       (super.noSuchMethod(Invocation.getter(#emitter),
           returnValue: _FakeEventEmitter()) as _i3.EventEmitter);
@@ -128,11 +132,11 @@ class MockClient extends _i1.Mock implements _i4.Client {
       super.noSuchMethod(Invocation.setter(#emotes, _emotes),
           returnValueForMissingStub: null);
   @override
-  Map<String, String> get emotesets =>
-      (super.noSuchMethod(Invocation.getter(#emotesets),
-          returnValue: <String, String>{}) as Map<String, String>);
+  List<String> get emotesets => (super
+          .noSuchMethod(Invocation.getter(#emotesets), returnValue: <String>[])
+      as List<String>);
   @override
-  set emotesets(Map<String, String>? _emotesets) =>
+  set emotesets(List<String>? _emotesets) =>
       super.noSuchMethod(Invocation.setter(#emotesets, _emotesets),
           returnValueForMissingStub: null);
   @override
@@ -199,6 +203,10 @@ class MockClient extends _i1.Mock implements _i4.Client {
   set userCommands(Map<String, _i5.Command>? _userCommands) =>
       super.noSuchMethod(Invocation.setter(#userCommands, _userCommands),
           returnValueForMissingStub: null);
+  @override
+  bool get debug =>
+      (super.noSuchMethod(Invocation.getter(#debug), returnValue: false)
+          as bool);
   @override
   bool get isConnected =>
       (super.noSuchMethod(Invocation.getter(#isConnected), returnValue: false)

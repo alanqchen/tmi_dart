@@ -6,13 +6,12 @@ import 'package:tmi_dart/src/message.dart';
 import '../../mocks.dart';
 
 void main() {
-  var client;
-  var logger;
+  late MockClient client;
+  late MockLogger logger;
 
   setUp(() {
     client = MockClient();
     logger = MockLogger();
-    when(client.username).thenReturn("justinfan33");
   });
 
   test("emits a chat message from a user", () {
@@ -27,7 +26,7 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN
@@ -54,7 +53,7 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN
@@ -77,7 +76,7 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN
@@ -96,7 +95,7 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN
@@ -110,7 +109,7 @@ void main() {
     var command = PrivMsg(client, logger);
 
     // WHEN
-    assert(message != null);
+    expect(message, isNot(null));
     command.call(message!);
 
     // THEN

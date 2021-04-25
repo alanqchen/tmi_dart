@@ -1,4 +1,4 @@
-name: tmi
+name: tmi_dart
 description: Dart library for the Twitch Messaging Interface. (Twitch.tv)
 version: 0.1.0
 author: Alan Chen <alanchen1908@gmail.com>

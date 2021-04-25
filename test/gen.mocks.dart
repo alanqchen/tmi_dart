@@ -1,7 +1,7 @@
 import 'package:logger/logger.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:tmi/tmi.dart';
+import 'package:tmi_dart/tmi.dart';
 
 import 'mocks.dart';
 

@@ -20,7 +20,7 @@ The Options constructor has two named parameters:
 | debug     | `bool`   | `false`       | If debug logging should be printed |
 
 ### Connection Class
-The Connection constructor has two named parameters:
+The Connection constructor has ten named parameters:
 
 | Parameter | Type   | Default Value | Description                                                                                                                                                                                    |
 |-----------|--------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -38,7 +38,7 @@ The Identity constructor has two *ordered* parameters:
 ### Example
 
 ```dart
-import 'package:tmi_dart/tmi.dart' as tmi;
+import 'package:tmi_dart_dart/tmi.dart' as tmi;
 
 var client = tmi.Client(
     channels: ['nodinawe', 'androidedelvalle'],

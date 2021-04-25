@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:tmi/src/commands/user/whisper.dart';
-import 'package:tmi/src/message.dart';
+import 'package:tmi_dart/src/commands/user/whisper.dart';
+import 'package:tmi_dart/src/message.dart';
 
 import '../../mocks.dart';
-/*
+
 void main() {
   var client;
   var logger;
@@ -12,109 +14,35 @@ void main() {
   setUp(() {
     client = MockClient();
     logger = MockLogger();
-    when(client.username).thenReturn("justinfan33");
   });
 
-  test("emits a chat message from a user", () {
+  test('emits whisper', () {
     // GIVEN
-    var expectedTags = {
-      "username": "ronni",
-      "message-type": "chat",
+    var message = Message.parse(
+        ':nodin_bot!nodin_bot@nodin_bot.tmi.twitch.tv WHISPER nodinawe :This is a test whisper!');
+    var command = Whisper(client, logger);
+    // Expected value
+    var expected = {
+      'from': '#nodin_bot',
+      'tags': {
+        'username': 'nodin_bot',
+        'message-type': 'whisper',
+      },
+      'msg': 'This is a test whisper!',
+      'self': false,
     };
-    var expectedMessage = "this is the message";
-    var message = Message.parse(
-        ":ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #dallas :$expectedMessage");
-    var command = Whisper(client, logger);
+    var expectedList = [];
+    expected.values.forEach((e) {
+      expectedList.add(e);
+    });
 
     // WHEN
     assert(message != null);
     command.call(message!);
 
     // THEN
-    verify(
-      client.emit("message", ["#dallas", expectedTags, expectedMessage, false]),
-    );
-    verify(
-      client.emit("chat", ["#dallas", expectedTags, expectedMessage, false]),
-    );
-  });
-
-  test("emits a cheer when a user send bits", () {
-    // GIVEN
-    var expectedTags = {
-      "username": "ronni",
-      "message-type": "chat",
-      "badges": "staff/1,bits/1000",
-      "bits": "100",
-      "display-name": "ronni"
-    };
-    var expectedMessage = "cheer100";
-    var message = Message.parse(
-        "@badges=staff/1,bits/1000;bits=100;display-name=ronni :ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #ronni :$expectedMessage");
-    var command = Whisper(client, logger);
-
-    // WHEN
-    assert(message != null);
-    command.call(message!);
-
-    // THEN
-    verify(
-      client.emit("cheer", ["#ronni", expectedTags, expectedMessage]),
-    );
-  });
-
-  test("emits an action for /me actions", () {
-    // GIVEN
-    var expectedTags = {
-      "username": "ronni",
-      "message-type": "action",
-      "badges": "staff/1",
-      "display-name": "ronni"
-    };
-    var expectedMessage = "jumps";
-    var message = Message.parse(
-        "@badges=staff/1;display-name=ronni :ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #ronni :\u0001ACTION ${expectedMessage}\u0001");
-    var command = Whisper(client, logger);
-
-    // WHEN
-    assert(message != null);
-    command.call(message!);
-
-    // THEN
-    verify(
-      client.emit("message", ["#ronni", expectedTags, expectedMessage, false]),
-    );
-    verify(
-      client.emit("action", ["#ronni", expectedTags, expectedMessage, false]),
-    );
-  });
-
-  test("emits hosted with user count", () {
-    // GIVEN
-    var message = Message.parse(
-        ":jtv!jtv@jtv.tmi.twitch.tv PRIVMSG #ronni :otherUser hosting you for 4");
-    var command = Whisper(client, logger);
-
-    // WHEN
-    assert(message != null);
-    command.call(message!);
-
-    // THEN
-    verify(client.emit("hosted", ["#ronni", "otheruser", 4, false]));
-  });
-
-  test("emits hosted without user count", () {
-    // GIVEN
-    var message = Message.parse(
-        ":jtv!jtv@jtv.tmi.twitch.tv PRIVMSG #ronni :otherUser hosting you");
-    var command = Whisper(client, logger);
-
-    // WHEN
-    assert(message != null);
-    command.call(message!);
-
-    // THEN
-    verify(client.emit("hosted", ["#ronni", "otheruser", 0, false]));
+    verify(client.emit('whisper', expectedList));
+    // It should also emit a message
+    verify(client.emit('message', expectedList));
   });
 }
-*/

@@ -1,8 +1,8 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:tmi/src/commands/user/join.dart';
-import 'package:tmi/src/message.dart';
-import 'package:tmi/tmi.dart';
+import 'package:tmi_dart/src/commands/user/join.dart';
+import 'package:tmi_dart/src/message.dart';
+import 'package:tmi_dart/tmi.dart';
 
 import '../../mocks.dart';
 import '../../../lib/src/utils.dart' as _;

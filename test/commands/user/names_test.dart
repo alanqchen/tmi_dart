@@ -1,7 +1,7 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:tmi/src/commands/user/names.dart';
-import 'package:tmi/src/message.dart';
+import 'package:tmi_dart/src/commands/user/names.dart';
+import 'package:tmi_dart/src/message.dart';
 
 import '../../mocks.dart';
 

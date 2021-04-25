@@ -17,8 +17,8 @@ class Connected extends Command {
     client.startMonitor();
 
     client.reconnections = 0;
-    client.connection.reconnectTimeInterval =
-        client.connection.reconnectInterval;
+    client.connection.reconnectCurrentInterval =
+        client.connection.reconnectBaseInterval;
 
     for (var channel in client.channels) {
       _join(channel);

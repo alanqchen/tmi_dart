@@ -14,49 +14,125 @@ import 'src/commands/pong.dart';
 import 'src/message.dart';
 import 'src/utils.dart' as _;
 
+/// Stores the clientID and debug mode for the tmi client.
+///
+/// The [clientID] property is the client ID given from Twitch. Default is ''.
+///
+/// The [debug] property is if debug logging should be printed. Default is
+/// false.
 class Options {
-  String clientID;
-  bool debug;
+  final String clientID;
+  final bool debug;
 
+  /// Creates an [Options] object for the tmi client.
+  /// Both [clientID] and [debug] are named optional parameters.
   Options({this.clientID = '', this.debug = false});
 }
 
+/// Stores the connection information for the tmi client.
+///
+/// The [server] property is the server domain of the connection.
+/// Does not include the protocol or port. Default is 'irc-ws.chat.twitch.tv'.
+///
+/// The [port] property is the port number of the connection. Default is 433 if
+/// secure is true, otherwise 80 if false.
+///
+/// The [reconnect] property is if the connection should reconnect. This changes
+/// to false on unsuccessful authentication. Default is false.
+///
+/// The [maxReconnectAttempts] property is the maximum number of reconnection
+/// attempts. Default is 2^53.
+///
+/// The [maxReconnectInterval] property is the maxmimum reconnect interval in
+/// seconds. Default is 3000 seconds.
+///
+/// The [reconnectDecay] property is the reconnect intecrval decay/backing off
+/// factor. Default is 1.5.
+///
+/// The [reconnectBaseInterval] property is the starting reconnect interval in
+/// seconds. Default is 1.0.
+///
+/// The [reconnectCurrentInterval] property is the current reconnect interval in
+/// seconds. Initially set to reconnectBaseInterval on a connection.
+///
+/// The [secure] property is if the connection should use SSL. Default is true.
+///
+/// The [timeout] property is the Duration to wait before checking if 'PONG' was
+/// recieved after a 'PING' was sent. This must be less than 60 seconds.
+/// Default is 10 seconds.
 class Connection {
-  String server;
-  int port;
+  final String server;
+  late int port;
   bool reconnect;
-  int maxReconnectAttempts; // Default 2^53
-  double maxReconnectInterval;
-  double reconnectDecay;
-  double reconnectInterval;
-  double reconnectTimeInterval;
-  bool secure;
-  Duration timeout;
+  final int maxReconnectAttempts;
+  final double maxReconnectInterval;
+  final double reconnectDecay;
+  final double reconnectBaseInterval;
+  double reconnectCurrentInterval;
+  final bool secure;
+  final Duration timeout;
 
+  /// Creates a [Connection] object for the tmi client.
+  /// All named parameters are optional. The [timeout] parameter must be less
+  /// than 60 seconds.
   Connection(
       {this.server = 'irc-ws.chat.twitch.tv',
-      this.port = 80,
+      this.port = 443,
       this.reconnect = false,
       this.maxReconnectAttempts = 9007199254740992,
       this.maxReconnectInterval = 30000,
       this.reconnectDecay = 1.5,
-      this.reconnectInterval = 1.0,
+      this.reconnectBaseInterval = 1.0,
       this.secure = true})
       : timeout = Duration(seconds: 10),
-        reconnectTimeInterval = reconnectInterval {
-    if (secure = true) {
-      port = 443; // Override port to 443 if secure
+        reconnectCurrentInterval = reconnectBaseInterval {
+    // Ensure timeout is less than 60 seconds
+    assert(timeout.inMilliseconds < 60000);
+    if (secure == false) {
+      port = 80; // Override port to 80 if not secure
     }
   }
 }
 
+/// Stores the tmi client identity information.
+///
+/// The [username] property is the username of the client. This may change if
+/// the username recieved from the IRC welcome message (code 001) is different.
+///
+/// The [oauthToken] property is the OAuth token for the given username.
 class Identity {
   String username;
-  String oauthToken;
+  final String oauthToken;
 
+  /// Creates an [Identity] object for the tmi client. The first parameter is
+  /// the [username], the second is the [oauthToken]. Both are required.
   Identity(this.username, this.oauthToken);
 }
 
+/// The tmi client.
+///
+/// The [channels] property is the channels that the client initially connected
+/// to.
+///
+/// The [options] property is the options values for the tmi client.
+///
+/// The [connection] property is the connection values for the tmi client.
+///
+/// The [identity] property is the identity values for the tmi client.
+///
+/// The [currentLatency] property is the current latency of the connection
+/// in milliseconds. This is calculated based on the time to recieve 'PONG'
+/// after 'PING' was sent.
+///
+/// The [latency] property is the time the 'PING' was sent, used to
+/// calculate [currentLatency].
+///
+/// The [globaluserstate] property is the given global user state from Twitch
+/// after connecting.
+///
+/// The [userstate] property is the current user state from Twitch.
+///
+/// The [lastJoined] property is the name of the last joined channel.
 class Client {
   // max jitter
   static const RECONNECT_JITTER = 100;
@@ -72,7 +148,6 @@ class Client {
   final IOWebsock _sok;
   late Monitor _monitor;
 
-  // Optional properties
   Options options;
   Connection connection;
   Identity identity;
@@ -96,6 +171,10 @@ class Client {
   late Map<String, Command> noScopeCommands;
   late Map<String, Command> userCommands;
 
+  /// The constructor for the tmi client. The [channels] paramter is required.
+  /// The [options] parameter should be a [Options] object. The [connection]
+  /// parameter should be a [Connection] object. The [identity] parameter should
+  /// be a [Identity] object.
   Client({
     required this.channels,
     options,
@@ -145,9 +224,9 @@ class Client {
 
   void connect() {
     // Add reconnect decay and clamp if exceeds max
-    connection.reconnectTimeInterval *= connection.reconnectDecay;
-    if (connection.reconnectTimeInterval > connection.maxReconnectInterval) {
-      connection.reconnectTimeInterval = connection.maxReconnectInterval;
+    connection.reconnectCurrentInterval *= connection.reconnectDecay;
+    if (connection.reconnectCurrentInterval > connection.maxReconnectInterval) {
+      connection.reconnectCurrentInterval = connection.maxReconnectInterval;
     }
 
     _sok.connect();
@@ -186,7 +265,7 @@ class Client {
     }
   }
 
-  void attemptReconnect() {
+  void _attemptReconnect() {
     if (connection.reconnect &&
         reconnections >= connection.maxReconnectAttempts) {
       emit('maxreconnect');
@@ -198,10 +277,10 @@ class Client {
       reconnecting = true;
       reconnections++;
       if (options.debug) {
-        log.d('Reconnecting in ${connection.reconnectTimeInterval}s');
+        log.d('Reconnecting in ${connection.reconnectCurrentInterval}s');
       }
       // Calc connection delay with random jitter
-      var connectionDelay = connection.reconnectTimeInterval * 1000 +
+      var connectionDelay = connection.reconnectCurrentInterval * 1000 +
           random.nextInt(RECONNECT_JITTER);
       Timer(Duration(milliseconds: connectionDelay.round()), () {
         reconnecting = false;
@@ -229,7 +308,7 @@ class Client {
       log.d('reconecting...');
       emit('_promiseConnect', [reason]);
       emit('disconnected', [reason]);
-      attemptReconnect();
+      _attemptReconnect();
     }
     _sok == null;
   }
@@ -242,7 +321,7 @@ class Client {
     emit('disconnected', [reason]);
     emit('_promiseConnect', [reason]);
 
-    attemptReconnect();
+    _attemptReconnect();
   }
 
   Listener on(String event, Function f) {
@@ -282,10 +361,10 @@ class Client {
     }
   }
 
-  bool get isConnected => _sok != null && _sok.isActive;
+  bool get isConnected => _sok.isActive;
 
   void _onOpen() async {
-    if ((_sok == null) || !_sok.isActive) return;
+    if (!isConnected) return;
 
     log.d('Openning connection');
 
@@ -363,7 +442,7 @@ class Client {
         case 'RECONNECT':
           if (options.debug) {
             log.d(
-                'Recieved RECONNECT request from Twitch. Disconnecting and reconnecting in ${connection.reconnectTimeInterval}s');
+                'Recieved RECONNECT request from Twitch. Disconnecting and reconnecting in ${connection.reconnectCurrentInterval}s');
             close();
             reconnecting = true;
             Timer(
